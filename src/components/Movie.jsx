@@ -5,7 +5,7 @@ const Movie = ({title, poster_path}) => {
 	return (
 		<div className="movie">
 			<figure>
-				<img src={IMG_API + poster_path} alt={title}/>
+				<img className="movie-poster" src={IMG_API + poster_path} alt={title}/>
 			</figure>
 			<h3>{title}</h3>
 		</div>
