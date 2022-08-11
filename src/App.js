@@ -1,25 +1,48 @@
-import logo from './logo.svg';
 import './App.css';
+import Movie from "./components/Movie";
+import {useEffect, useState} from "react";
+import {
+	BrowserRouter as Router,
+	Routes,
+	Route,
+	Link
+} from "react-router-dom";
+import MovieInfo from "./components/MovieInfo";
+
+const tmdbKey = process.env.API_KEY;
+
 
 function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
+	const query = `https://api.themoviedb.org/3/discover/movie?&api_key=581ff752d0b7378a67028dc38a686b58&release_date.desc`
+	
+	const [movies, setMovies] = useState([]);
+	
+	useEffect(() => {
+		fetch(query)
+			.then(res => res.json())
+			.then(data => {
+				console.log(data);
+				setMovies(data.results);
+			});
+	}, []);
+	
+	return (
+		<>
+			<h2>Out Now</h2>
+			<div className="movie-container">
+				{movies.map(movie =>
+					<Router>
+						<Link to={movie.title}>
+							<Movie key={movie.id} {...movie}/>
+						</Link>
+						<Routes>
+							<Route path={movie.title} element={<MovieInfo/>}/>
+						</Routes>
+					</Router>)}
+				
+			</div>
+		</>
+	);
 }
 
 export default App;
